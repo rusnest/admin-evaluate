@@ -19,15 +19,29 @@ import tgdd from "assets/images/shop/tgdd.png";
 import shopee from "assets/images/shop/shopee.jpeg";
 import tiki from "assets/images/shop/tiki.png";
 import sendo from "assets/images/shop/sendo.png";
-import { getTikiProducts } from "firebases/services";
+import {
+  getTikiProducts,
+  getSendoProducts,
+  getTGDDProducts,
+  getShopeeProducts,
+} from "firebases/services";
 
 function Dashboard() {
   const [countTiki, setCountTiki] = useState(0);
+  const [countSendo, setCountSendo] = useState(0);
+  const [countTGDD, setCountTGDD] = useState(0);
+  const [countShopee, setCountShopee] = useState(0);
   const navigate = useNavigate();
 
-  const getCountTiki = async () => {
+  const getCountProduct = async () => {
     const tikis = await getTikiProducts();
     setCountTiki(tikis.length);
+    const sendos = await getSendoProducts();
+    setCountSendo(sendos.length);
+    const shopees = await getShopeeProducts();
+    setCountShopee(shopees.length);
+    const tgdds = await getTGDDProducts();
+    setCountTGDD(tgdds.length);
   }
 
   useEffect(() => {
@@ -36,7 +50,7 @@ function Dashboard() {
       navigate("/authentication/sign-in");
     }
 
-    getCountTiki();
+    getCountProduct();
   }, []);
 
   return (
@@ -51,7 +65,7 @@ function Dashboard() {
                 color="dark"
                 image={tgdd}
                 title="The Gioi Di Dong"
-                count={281}
+                count={countTGDD}
                 percentage={{
                   color: "success",
                   amount: "+55%",
@@ -80,7 +94,7 @@ function Dashboard() {
                 color="success"
                 image={sendo}
                 title="Sendo"
-                count="34k"
+                count={countSendo}
                 percentage={{
                   color: "success",
                   amount: "+1%",
@@ -95,7 +109,7 @@ function Dashboard() {
                 color="primary"
                 image={shopee}
                 title="Shopee"
-                count="+91"
+                count={countShopee}
                 percentage={{
                   color: "success",
                   amount: "",

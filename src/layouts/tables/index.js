@@ -41,13 +41,15 @@ function Tables() {
   }, []);
 
   const handleCrawlProduct = async () => {
-    const tikis = await crawlFromTiki();
-    await evaluateFromTiki(tikis);
-    const sendos = await crawlFromSendo();
-    await evaluateFromSendo(sendos);
-    const shopees = await crawlFromShopee();
-    await evaluateFromShopee(shopees);
+    // const tikis = await crawlFromTiki();
+    // await evaluateFromTiki(tikis);
+    // const sendos = await crawlFromSendo();
+    // await evaluateFromSendo(sendos);
+    // const shopees = await crawlFromShopee();
+    // await evaluateFromShopee(shopees);
+    console.log("first")
     const tgdds = await crawlFromTGDD();
+    console.log("evaluate")
     await evaluateFromTGDD(tgdds);
 
     handleChangeShop("Tiki");
@@ -84,7 +86,7 @@ function Tables() {
     return products.map(item => {
       return {
         author: <Author image={item.image} name={item.name} email={item.description} />,
-        function: <Job title={item.evaluate} description={item.percent} />,
+        function: <Job title={item.evaluate} description={item.percent} star={item.star} />,
         action: (
           <MDTypography component="a" href={item.link} variant="caption" color="text" fontWeight="medium">
             Access Link

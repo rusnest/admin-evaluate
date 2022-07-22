@@ -23,7 +23,6 @@ import Switch from "@mui/material/Switch";
 import IconButton from "@mui/material/IconButton";
 import Icon from "@mui/material/Icon";
 
-
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
@@ -43,6 +42,14 @@ import {
   setSidenavColor,
   setDarkMode,
 } from "context";
+import { crawlFromTiki } from "services/get";
+import { evaluateFromTiki } from "services/get";
+import { crawlFromSendo } from "services/get";
+import { evaluateFromSendo } from "services/get";
+import { crawlFromShopee } from "services/get";
+import { evaluateFromShopee } from "services/get";
+import { crawlFromTGDD } from "services/get";
+import { evaluateFromTGDD } from "services/get";
 
 let timeoutCrawl;
 
@@ -59,9 +66,9 @@ function Configurator() {
   const [disabled, setDisabled] = useState(false);
   const [crawling, setCrawling] = useState(false);
   const [crawlTime, setCrawlTime] = useState(() => {
-    return JSON.parse(localStorage.getItem('crawlTime')) || 0;
+    return JSON.parse(localStorage.getItem("crawlTime")) || 0;
   });
-  const [timeCrawl, setTimeCrawl] = useState('');
+  const [timeCrawl, setTimeCrawl] = useState("");
   const [month, setMonth] = useState(0);
   const [week, setWeek] = useState(0);
   const [day, setDay] = useState(0);
@@ -83,6 +90,17 @@ function Configurator() {
     // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleDisabled);
   }, []);
+
+  const handleCrawlProduct = async () => {
+    const tikis = await crawlFromTiki();
+    await evaluateFromTiki(tikis);
+    const sendos = await crawlFromSendo();
+    await evaluateFromSendo(sendos);
+    const shopees = await crawlFromShopee();
+    await evaluateFromShopee(shopees);
+    const tgdds = await crawlFromTGDD();
+    await evaluateFromTGDD(tgdds);
+  };
 
   useEffect(() => {
     timeoutCrawl = setTimeout(() => {
@@ -108,6 +126,7 @@ function Configurator() {
 
     if (crawlTime <= 0) {
       clearTimeout(timeoutCrawl);
+      handleCrawlProduct();
     }
   }, [crawlTime]);
 
@@ -178,10 +197,10 @@ function Configurator() {
     setDay(value);
   };
 
-
   // handler setting craler auto
   const handleSetCrawlerAuto = () => {
-    const timeout = (month * 30 * 24 * 60 * 60 + week * 7 * 24 * 60 * 60 + day * 24 * 60 * 60) * 1000;
+    const timeout =
+      (month * 30 * 24 * 60 * 60 + week * 7 * 24 * 60 * 60 + day * 24 * 60 * 60) * 1000;
 
     const interval = setInterval(() => {
       console.log("Crawler Data ...");
@@ -192,20 +211,20 @@ function Configurator() {
     setCrawling(true);
     setCrawlTime(timeout);
     localStorage.setItem("crawlTime", JSON.parse(timeout));
-    localStorage.setItem('interval', JSON.stringify(interval));
+    localStorage.setItem("interval", JSON.stringify(interval));
   };
 
   // handle End Crawling
   const handleEndCrawl = () => {
-    const interval = JSON.parse(localStorage.getItem('interval'));
+    const interval = JSON.parse(localStorage.getItem("interval"));
     clearInterval(interval);
     setCrawling(false);
     setCrawlTime(0);
-    setTimeCrawl('');
+    setTimeCrawl("");
     clearTimeout(timeoutCrawl);
     localStorage.setItem("crawlTime", JSON.parse(0));
     localStorage.setItem("interval", JSON.stringify(null));
-  }
+  };
 
   return (
     <ConfiguratorRoot variant="permanent" ownerState={{ openConfigurator }}>
