@@ -12,7 +12,7 @@ import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatist
 
 // React router dom
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // image
 import tgdd from "assets/images/shop/tgdd.png";
@@ -31,6 +31,11 @@ function Dashboard() {
   const [countSendo, setCountSendo] = useState(0);
   const [countTGDD, setCountTGDD] = useState(0);
   const [countShopee, setCountShopee] = useState(0);
+
+  const [amountTGDD, setAmountTGDD] = useState(0);
+  const [amountTiki, setAmountTiki] = useState(0);
+  const [amountSendo, setAmountSendo] = useState(0);
+  const [amountShopee, setAmountShopee] = useState(0);
   const navigate = useNavigate();
 
   const getCountProduct = async () => {
@@ -42,6 +47,17 @@ function Dashboard() {
     setCountShopee(shopees.length);
     const tgdds = await getTGDDProducts();
     setCountTGDD(tgdds.length);
+
+    // Amount
+    const tikiPOS = tikis.filter((item) => item.evaluate === "POSITIVE");
+    const sendoPOS = sendos.filter((item) => item.evaluate === "POSITIVE");
+    const shopeePOS = shopees.filter((item) => item.evaluate === "POSITIVE");
+    const tgddPOS = tgdds.filter((item) => item.evaluate === "POSITIVE");
+
+    setAmountTiki(Math.ceil((tikiPOS.length * 100) / tikis.length));
+    setAmountTGDD(Math.ceil((tgddPOS.length * 100) / tgdds.length));
+    setAmountSendo(Math.ceil((sendoPOS.length * 100) / sendos.length));
+    setAmountShopee(Math.ceil((shopeePOS.length * 100) / shopees.length));
   }
 
   useEffect(() => {
@@ -68,8 +84,8 @@ function Dashboard() {
                 count={countTGDD}
                 percentage={{
                   color: "success",
-                  amount: "+55%",
-                  label: "positive",
+                  amount: `${amountTGDD} %`,
+                  label: "Positive",
                 }}
               />
             </MDBox>
@@ -82,8 +98,8 @@ function Dashboard() {
                 count={countTiki}
                 percentage={{
                   color: "success",
-                  amount: "+3%",
-                  label: "than last month",
+                  amount: `${amountTiki} %`,
+                  label: "Positive",
                 }}
               />
             </MDBox>
@@ -97,8 +113,8 @@ function Dashboard() {
                 count={countSendo}
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  amount: `${amountSendo} %`,
+                  label: "Positive",
                 }}
               />
             </MDBox>
@@ -112,8 +128,8 @@ function Dashboard() {
                 count={countShopee}
                 percentage={{
                   color: "success",
-                  amount: "",
-                  label: "Just updated",
+                  amount: `${amountShopee} %`,
+                  label: "Positive",
                 }}
               />
             </MDBox>
