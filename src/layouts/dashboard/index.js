@@ -49,16 +49,26 @@ function Dashboard() {
     setCountTGDD(tgdds.length);
 
     // Amount
-    const tikiPOS = tikis.filter((item) => item.evaluate === "POSITIVE");
-    const sendoPOS = sendos.filter((item) => item.evaluate === "POSITIVE");
-    const shopeePOS = shopees.filter((item) => item.evaluate === "POSITIVE");
-    const tgddPOS = tgdds.filter((item) => item.evaluate === "POSITIVE");
+    if (tikis.length) {
+      const tikiPOS = tikis.filter((item) => item.evaluate === "POSITIVE");
+      setAmountTiki(Math.ceil((tikiPOS.length * 100) / tikis.length));
+    }
 
-    setAmountTiki(Math.ceil((tikiPOS.length * 100) / tikis.length));
-    setAmountTGDD(Math.ceil((tgddPOS.length * 100) / tgdds.length));
-    setAmountSendo(Math.ceil((sendoPOS.length * 100) / sendos.length));
-    setAmountShopee(Math.ceil((shopeePOS.length * 100) / shopees.length));
-  }
+    if (sendos.length) {
+      const sendoPOS = sendos.filter((item) => item.evaluate === "POSITIVE");
+      setAmountSendo(Math.ceil((sendoPOS.length * 100) / sendos.length));
+    }
+
+    if (shopees.length) {
+      const shopeePOS = shopees.filter((item) => item.evaluate === "POSITIVE");
+      setAmountShopee(Math.ceil((shopeePOS.length * 100) / shopees.length));
+    }
+
+    if (tgdds.length) {
+      const tgddPOS = tgdds.filter((item) => item.evaluate === "POSITIVE");
+      setAmountTGDD(Math.ceil((tgddPOS.length * 100) / tgdds.length));
+    }
+  };
 
   useEffect(() => {
     const logined = JSON.parse(localStorage.getItem("logined")) ?? false;

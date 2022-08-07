@@ -41,16 +41,15 @@ function Tables() {
   }, []);
 
   const handleCrawlProduct = async () => {
-    // const tikis = await crawlFromTiki();
-    // await evaluateFromTiki(tikis);
-    // const sendos = await crawlFromSendo();
-    // await evaluateFromSendo(sendos);
-    // const shopees = await crawlFromShopee();
-    // await evaluateFromShopee(shopees);
-    console.log("first")
+    const tikis = await crawlFromTiki();
+    const sendos = await crawlFromSendo();
+    const shopees = await crawlFromShopee();
     const tgdds = await crawlFromTGDD();
-    console.log("evaluate")
-    await evaluateFromTGDD(tgdds);
+    
+    await evaluateFromTiki(tikis);
+    await evaluateFromSendo(sendos);
+    await evaluateFromShopee(shopees);
+    await evaluateFromTGDD(tgdds); 
 
     handleChangeShop("Tiki");
   }
